@@ -5,8 +5,8 @@
 
 #define VERSION "2.6R5"
 
-#define WIFI_SSID "fb1"
-#define WIFI_PASSWORD ""
+#define WIFI_SSID "Test"
+#define WIFI_PASSWORD "qwertyqwerty"
 #define HOSTNAME "MHI-AC-Ctrl"
 
 #define WiFI_SEARCHStrongestAP true                 // when false then the first WiFi access point with matching SSID found is used.
@@ -14,7 +14,7 @@
                                                     
 #define WiFI_SEARCH_FOR_STRONGER_AP_INTERVALL 12    // WiFi network re-scan interval in minutes with alternate to +5dB stronger signal if detected
 
-#define MQTT_SERVER "192.168.178.111"               // broker name or IP address of the broker
+#define MQTT_SERVER "192.168.40.15"               // broker name or IP address of the broker
 #define MQTT_PORT 1883                              // port number used by the broker
 #define MQTT_USER ""                                // if authentication is not used, leave it empty
 #define MQTT_PASSWORD ""                            // if authentication is not used, leave it empty
