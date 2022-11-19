@@ -68,7 +68,7 @@ void initWiFi(){
   WiFi.disconnect(true);    // Delete SDK wifi config
   delay(200);
   WiFi.mode(WIFI_STA);
-  WiFi.hostname(HOSTNAME); 
+  WiFi.hostname(HOSTNAME);
   WiFi.setAutoReconnect(false);
 }
 
@@ -135,51 +135,53 @@ int MQTTreconnect() {
     }
 
     if (MQTTclient.connect(HOSTNAME, MQTT_USER, MQTT_PASSWORD, MQTT_PREFIX TOPIC_CONNECTED, 0, true, PAYLOAD_CONNECTED_FALSE)) {
-      Serial.println(F(" connected"));
-      Serial.printf("MQTTclient.connected=%i\n", MQTTclient.connected());
-      reconnect_trials=0;
-      output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
-      output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
-      itoa(WiFi.RSSI(), strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_RSSI), strtmp);
-      itoa(WIFI_lost, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_LOST), strtmp);
-      itoa(MQTT_lost, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_MQTT_LOST), strtmp);
-      WiFi.BSSIDstr().toCharArray(strtmp, 20);
-      output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_BSSID), strtmp);
+      Serial.println(F(" MQTT connected"));
+    //   Serial.printf("MQTTclient.connected=%i\n", MQTTclient.connected());
+    //   reconnect_trials=0;
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
+    //   itoa(WiFi.RSSI(), strtmp, 10);
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_RSSI), strtmp);
+    //   itoa(WIFI_lost, strtmp, 10);
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_LOST), strtmp);
+    //   itoa(MQTT_lost, strtmp, 10);
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_MQTT_LOST), strtmp);
+    //   WiFi.BSSIDstr().toCharArray(strtmp, 20);
+    //   output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_BSSID), strtmp);
 
-      // for testing publish list of access points with the expected SSID 
-      Serial.printf("%i access points available\n", networksFound);         // unlar, warum hier networksFound=0 !!!
-      for (uint i = 0; i < networksFound; i++)
-      {
-        if(strcmp(WiFi.SSID(i).c_str(), WIFI_SSID) == 0){
-          strcpy(strtmp, "BSSID:");
-          strcat(strtmp, WiFi.BSSIDstr(i).c_str());
-          char strtmp2[20];
-          strcat(strtmp, " RSSI:");
-          itoa(WiFi.RSSI(i), strtmp2, 10);
-          strcat(strtmp, strtmp2);
-          MQTTclient.publish(MQTT_PREFIX "APs", strtmp, true);
-        }
-      }
+      // for testing publish list of access points with the expected SSID
+      // Serial.printf("%i access points available\n", networksFound);         // unlar, warum hier networksFound=0 !!!
+      // for (int i = 0; i < networksFound; i++)
+      // {
+      //   if(strcmp(WiFi.SSID(i).c_str(), WIFI_SSID) == 0){
+      //     strcpy(strtmp, "BSSID:");
+      //     strcat(strtmp, WiFi.BSSIDstr(i).c_str());
+      //     char strtmp2[20];
+      //     strcat(strtmp, " RSSI:");
+      //     itoa(WiFi.RSSI(i), strtmp2, 10);
+      //     strcat(strtmp, strtmp2);
+      //     MQTTclient.publish(MQTT_PREFIX "APs", strtmp, true);
+      //   }
+      // }
 
-      itoa(rising_edge_cnt.SCK, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_FSCK), strtmp);
-      itoa(rising_edge_cnt.MOSI, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_FMOSI), strtmp);
-      itoa(rising_edge_cnt.MISO, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_FMISO), strtmp);
-      
-      MQTTclient.subscribe(MQTT_SET_PREFIX "#");
+      // itoa(rising_edge_cnt.SCK, strtmp, 10);
+      // output_P((ACStatus)type_status, PSTR(TOPIC_FSCK), strtmp);
+      // itoa(rising_edge_cnt.MOSI, strtmp, 10);
+      // output_P((ACStatus)type_status, PSTR(TOPIC_FMOSI), strtmp);
+      // itoa(rising_edge_cnt.MISO, strtmp, 10);
+      // output_P((ACStatus)type_status, PSTR(TOPIC_FMISO), strtmp);
+
+      // MQTTclient.subscribe(MQTT_SET_PREFIX "#");
+
+    //   MQTTclient.subscribe(MQTT_SET_PREFIX "#");
       return MQTT_RECONNECTED;
     }
     else {
       Serial.print(F(" reconnect failed, reason "));
-      itoa(MQTTclient.state(), strtmp, 10);
-      Serial.print(strtmp);
-      Serial.print(", WiFi status: ");
-      Serial.println(WiFi.status());
+    //   itoa(MQTTclient.state(), strtmp, 10);
+    //   Serial.print(strtmp);
+    //   Serial.print(", WiFi status: ");
+    //   Serial.println(WiFi.status());
       return MQTT_NOT_CONNECTED;
     }
   }
