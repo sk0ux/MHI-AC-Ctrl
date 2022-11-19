@@ -203,7 +203,7 @@ void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   const int mqtt_topic_size = 100;
   char mqtt_topic[mqtt_topic_size];
 
-  Serial.printf_P(PSTR("DISABLED status=%i topic=%s payload=%s\n"), status, topic, payload);
+  Serial.printf_P(PSTR("status=%i topic=%s payload=%s\n"), status, topic, payload);
 
   if ((status & 0xc0) == type_status)
     strncpy_P(mqtt_topic, PSTR(MQTT_PREFIX), mqtt_topic_size);
@@ -212,7 +212,7 @@ void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   else if ((status & 0xc0) == type_erropdata)
     strncpy_P(mqtt_topic, PSTR(MQTT_ERR_OP_PREFIX), mqtt_topic_size);
   strncat_P(mqtt_topic, topic, mqtt_topic_size - strlen(mqtt_topic));
-  // MQTTclient.publish_P(mqtt_topic, payload, true);
+  MQTTclient.publish_P(mqtt_topic, payload, true);
 }
 
 #if TEMP_MEASURE_PERIOD > 0
