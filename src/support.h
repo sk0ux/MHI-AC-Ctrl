@@ -5,8 +5,10 @@
 
 #define VERSION "2.6R5"
 
-#define WIFI_SSID "Test"
-#define WIFI_PASSWORD "qwertyqwerty"
+##define WIFI_SSID "Test"
+#define WIFI_SSID "SK0UX-Guest"
+##define WIFI_PASSWORD "qwertyqwerty"
+#define WIFI_PASSWORD "berget0065"
 #define HOSTNAME "MHI-AC-Ctrl2"
 
 #define WiFI_SEARCHStrongestAP true                 // when false then the first WiFi access point with matching SSID found is used.
