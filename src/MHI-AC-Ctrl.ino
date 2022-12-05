@@ -372,15 +372,19 @@ void setup() {
   Serial.println();
   Serial.println(F("Starting MHI-AC-Ctrl v" VERSION));
   Serial.printf_P(PSTR("CPU frequency[Hz]=%lu\n"), F_CPU);
+#ifdef TARGET_ESP8266
   Serial.printf("ESP.getCoreVersion()=%s\n", ESP.getCoreVersion().c_str());
   Serial.printf("ESP.getSdkVersion()=%s\n", ESP.getSdkVersion());
   Serial.printf("ESP.checkFlashCRC()=%i\n", ESP.checkFlashCRC());
+#endif
 
 #if TEMP_MEASURE_PERIOD > 0
   setup_ds18x20();
 #endif
+#ifdef TARGET_ESP8266
   initWiFi();
-  MeasureFrequency();
+#endif
+ MeasureFrequency();
   setupOTA();
   MQTTclient.setServer(MQTT_SERVER, MQTT_PORT);
   MQTTclient.setCallback(MQTT_subscribe_callback);
@@ -395,8 +399,11 @@ void loop() {
   static int MQTTStatus = MQTT_NOT_CONNECTED;
   static unsigned long previousMillis = millis();
   if (((WiFi.status() != WL_CONNECTED) & (WiFiStatus != WIFI_CONNECT_OK)) || (WiFI_SEARCHStrongestAP & (millis() - previousMillis >= WiFI_SEARCH_FOR_STRONGER_AP_INTERVALL*60*1000))) {
+#ifdef TARGET_ESP8266
     //Serial.printf("loop: call setupWiFi(WiFiStatus)\n");
     setupWiFi(WiFiStatus);
+#endif
+ 
     previousMillis = millis();
     //Serial.println(WiFiStatus);
   }

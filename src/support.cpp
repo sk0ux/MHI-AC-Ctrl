@@ -63,6 +63,7 @@ void MeasureFrequency() {  // measure the frequency on the pins
 }
 
 
+#ifdef TARGET_ESP8266
 void initWiFi(){
   WiFi.persistent(false);
   WiFi.disconnect(true);    // Delete SDK wifi config
@@ -71,7 +72,9 @@ void initWiFi(){
   WiFi.hostname(HOSTNAME);
   WiFi.setAutoReconnect(false);
 }
+#endif
 
+#ifdef TARGET_ESP8266
 uint networksFound = 0;
 void setupWiFi(int& WiFiStatus) {
   int max_rssi = -999;
@@ -121,6 +124,7 @@ void setupWiFi(int& WiFiStatus) {
   }
   //Serial.printf("setupWiFi E:%i access points available\n", networksFound);          // Warum ist hier networksFound=0?????
 }
+#endif
 
 int MQTTreconnect() {
   char strtmp[50];
@@ -149,8 +153,9 @@ int MQTTreconnect() {
       WiFi.BSSIDstr().toCharArray(strtmp, 20);
       output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_BSSID), strtmp);
 
+#ifdef TARGET_ESP8266
     // for testing publish list of access points with the expected SSID
-    Serial.printf("%i access points available\n", networksFound);         // unlar, warum hier networksFound=0 !!!
+  Serial.printf("%i access points available\n", networksFound);         // unlar, warum hier networksFound=0 !!!
     for (int i = 0; i < networksFound; i++)
     {
       Serial.printf("networksfound %i\n\n", i);
@@ -164,7 +169,7 @@ int MQTTreconnect() {
       //     MQTTclient.publish(MQTT_PREFIX "APs", strtmp, true);
        }
     }
-
+#endif
 
      itoa(rising_edge_cnt.SCK, strtmp, 10);
      output_P((ACStatus)type_status, PSTR(TOPIC_FSCK), strtmp);

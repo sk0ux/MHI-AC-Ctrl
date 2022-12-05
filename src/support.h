@@ -50,7 +50,9 @@
                                                     // this will simulate .x degrees resolution
 // *** The configuration ends here ***
 
+#ifdef TARGET_ESP8266
 #include <ESP8266WiFi.h>        // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi
+#endif
 #include <PubSubClient.h>       // https://github.com/knolleary/pubsubclient
 #include <ArduinoOTA.h>         // https://github.com/esp8266/Arduino/tree/master/libraries/ArduinoOTA
 
