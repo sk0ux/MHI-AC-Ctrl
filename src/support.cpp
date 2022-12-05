@@ -87,7 +87,7 @@ void setupWiFi(int& WiFiStatus) {
     Serial.printf("setupWiFi:%i access points available\n", networksFound);
     for (uint i = 0; i < networksFound; i++)
     {
-      Serial.printf("%2d %25s %2d %ddBm %s %s %02x\n", i + 1, WiFi.SSID(i).c_str(), WiFi.channel(i), WiFi.RSSI(i), WiFi.BSSIDstr(i).c_str(), WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "secured"), (uint)WiFi.encryptionType(i);
+      Serial.printf("%2d %25s %2d %ddBm %s %s %02x\n", i + 1, WiFi.SSID(i).c_str(), WiFi.channel(i), WiFi.RSSI(i), WiFi.BSSIDstr(i).c_str(), WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "secured"),  WiFi.encryptionType(i);
       if((strcmp(WiFi.SSID(i).c_str(), WIFI_SSID) == 0) && (WiFi.RSSI(i)>max_rssi)){
           max_rssi = WiFi.RSSI(i);
           strongest_AP = i;
@@ -156,7 +156,7 @@ int MQTTreconnect() {
 #ifdef TARGET_ESP8266
     // for testing publish list of access points with the expected SSID
   Serial.printf("%i access points available\n", networksFound);         // unlar, warum hier networksFound=0 !!!
-    for (int i = 0; i < networksFound; i++)
+    for (uint i = 0; i < networksFound; i++)
     {
       Serial.printf("networksfound %i\n\n", i);
        if(strcmp(WiFi.SSID(i).c_str(), WIFI_SSID) == 0){
