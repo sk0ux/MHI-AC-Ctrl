@@ -390,7 +390,7 @@ void setup() {
 
 
 void loop() {
-  static byte ds18x20_value_old = 0;
+  /* static byte ds18x20_value_old = 0; */
   static int WiFiStatus = WIFI_CONNECT_TIMEOUT;
   static int MQTTStatus = MQTT_NOT_CONNECTED;
   static unsigned long previousMillis = millis();
