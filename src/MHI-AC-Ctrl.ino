@@ -185,21 +185,21 @@ class StatusHandler : public CallbackInterface_Status {
           switch (value) {
             case mode_auto:
               if (status != erropdata_mode)
-                output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_AUTO));
+                output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_AUTO);
               else
-                output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_STOP));
+                output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_STOP);
               break;
             case mode_dry:
-              output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_DRY));
+              output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_DRY);
               break;
             case mode_cool:
-              output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_COOL));
+              output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_COOL);
               break;
             case mode_fan:
-              output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_FAN));
+              output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_FAN);
               break;
             case mode_heat:
-              output_P(status, PSTR(TOPIC_MODE), PSTR(PAYLOAD_MODE_HEAT));
+              output_P2(status, PSTR(TOPIC_MODE), PAYLOAD_MODE_HEAT);
               break;
           }
           break;
@@ -214,24 +214,24 @@ class StatusHandler : public CallbackInterface_Status {
         case status_fan:
           switch (value) {
             case 0:
-              output_P(status, TOPIC_FAN, "1");
+              output_P2(status, TOPIC_FAN, "1");
               break;
             case 1:
-              output_P(status, TOPIC_FAN, "2");
+              output_P2(status, TOPIC_FAN, "2");
               break;
             case 2:
-              output_P(status, TOPIC_FAN, "3");
+              output_P2(status, TOPIC_FAN, "3");
               break;
             case 6:
-              output_P(status, TOPIC_FAN, "4");
+              output_P2(status, TOPIC_FAN, "4");
               break;
             case 7: 
-              output_P(status, TOPIC_FAN, PAYLOAD_FAN_AUTO);
+              output_P2(status, TOPIC_FAN, PAYLOAD_FAN_AUTO);
               break;
             default: // invalid values
               itoa(value, strtmp, 10);
               strcat(strtmp, "?");
-              output_P(status, TOPIC_FAN, strtmp);
+              output_P2(status, TOPIC_FAN, strtmp);
               break;              
           }
           break;
@@ -249,14 +249,8 @@ class StatusHandler : public CallbackInterface_Status {
           }
           break;
         case status_troom:
-          {
-            int8_t troom_diff = value - status_troom_old; // avoid using other functions inside the brackets of abs, see https://www.arduino.cc/reference/en/language/functions/math/abs/
-            if (abs(troom_diff) > TROOM_FILTER_LIMIT/0.25f) { // Room temperature delta > 0.25°C
-              status_troom_old = value;
-              dtostrf((value - 61) / 4.0, 0, 2, strtmp);
-              output_P(status, PSTR(TOPIC_TROOM), strtmp);
-            }
-          }
+          dtostrf((value - 61) / 4.0, 0, 2, strtmp);
+          output_P2(status, PSTR(TOPIC_TROOM), strtmp);
           break;
         case status_tsetpoint:
 #ifdef ENHANCED_RESOLUTION
@@ -267,7 +261,7 @@ class StatusHandler : public CallbackInterface_Status {
         case opdata_tsetpoint:
         case erropdata_tsetpoint:
           dtostrf((value & 0x7f)/ 2.0, 0, 1, strtmp);
-          output_P(status, PSTR(TOPIC_TSETPOINT), strtmp);
+          output_P2(status, PSTR(TOPIC_TSETPOINT), strtmp);
           break;
         case status_errorcode:
         case erropdata_errorcode:
@@ -277,47 +271,47 @@ class StatusHandler : public CallbackInterface_Status {
         case opdata_return_air:
         case erropdata_return_air:
           dtostrf((value - 61) / 4.0, 0, 2, strtmp);
-          output_P(status, PSTR(TOPIC_RETURNAIR), strtmp);
+          output_P2(status, PSTR(TOPIC_RETURNAIR), strtmp);
           break;
         case opdata_thi_r1:
         case erropdata_thi_r1:
           itoa(0.327f * value - 11.4f, strtmp, 10); // only rough approximation
-          output_P(status, PSTR(TOPIC_THI_R1), strtmp);
+          output_P2(status, PSTR(TOPIC_THI_R1), strtmp);
           break;
         case opdata_thi_r2:
         case erropdata_thi_r2:
           itoa(0.327f * value - 11.4f, strtmp, 10); // formula for calculation not known
-          output_P(status, PSTR(TOPIC_THI_R2), strtmp);
+          output_P2(status, PSTR(TOPIC_THI_R2), strtmp);
           break;
         case opdata_thi_r3:
         case erropdata_thi_r3:
           itoa(0.327f * value - 11.4f, strtmp, 10); // only rough approximation
-          output_P(status, PSTR(TOPIC_THI_R3), strtmp);
+          output_P2(status, PSTR(TOPIC_THI_R3), strtmp);
           break;
         case opdata_iu_fanspeed:
         case erropdata_iu_fanspeed:
           itoa(value, strtmp, 10);
-          output_P(status, PSTR(TOPIC_IU_FANSPEED), strtmp);
+          output_P2(status, PSTR(TOPIC_IU_FANSPEED), strtmp);
           break;
         case opdata_total_iu_run:
         case erropdata_total_iu_run:
           itoa(value * 100, strtmp, 10);
-          output_P(status, PSTR(TOPIC_TOTAL_IU_RUN), strtmp);
+          output_P2(status, PSTR(TOPIC_TOTAL_IU_RUN), strtmp);
           break;
         case erropdata_outdoor:
         case opdata_outdoor:
           dtostrf((value - 94) * 0.25f, 0, 2, strtmp);
-          output_P(status, PSTR(TOPIC_OUTDOOR), strtmp);
+          output_P2(status, PSTR(TOPIC_OUTDOOR), strtmp);
           break;
         case opdata_tho_r1:
         case erropdata_tho_r1:
           itoa(0.327f * value - 11.4f, strtmp, 10); // formula for calculation not known
-          output_P(status, PSTR(TOPIC_THO_R1), strtmp);
+          output_P2(status, PSTR(TOPIC_THO_R1), strtmp);
           break;
         case opdata_comp:
         case erropdata_comp:
           dtostrf(highByte(value) * 25.6f + 0.1f * lowByte(value), 0, 2, strtmp);  // to be confirmed
-          output_P(status, PSTR(TOPIC_COMP), strtmp);
+          output_P2(status, PSTR(TOPIC_COMP), strtmp);
           break;
         case erropdata_td:
         case opdata_td:
@@ -325,25 +319,25 @@ class StatusHandler : public CallbackInterface_Status {
             strcpy(strtmp, "<=30");
           else
             itoa(value / 2 + 32, strtmp, 10);
-          output_P(status, PSTR(TOPIC_TD), strtmp);
+          output_P2(status, PSTR(TOPIC_TD), strtmp);
           break;
         case opdata_ct:
         case erropdata_ct:
           dtostrf(value * 14 / 51.0f, 0, 2, strtmp);
-          output_P(status, PSTR(TOPIC_CT), strtmp);
+          output_P2(status, PSTR(TOPIC_CT), strtmp);
           break;
         case opdata_tdsh:
           itoa(value, strtmp, 10); // formula for calculation not known
-          output_P(status, PSTR(TOPIC_TDSH), strtmp);
+          output_P2(status, PSTR(TOPIC_TDSH), strtmp);
           break;
         case opdata_protection_no:
           itoa(value, strtmp, 10);
-          output_P(status, PSTR(TOPIC_PROTECTION_NO), strtmp);
+          output_P2(status, PSTR(TOPIC_PROTECTION_NO), strtmp);
           break;
         case opdata_ou_fanspeed:
         case erropdata_ou_fanspeed:
           itoa(value, strtmp, 10);
-          output_P(status, PSTR(TOPIC_OU_FANSPEED), strtmp);
+          output_P2(status, PSTR(TOPIC_OU_FANSPEED), strtmp);
           break;
         case opdata_defrost:
           if (value)
@@ -354,12 +348,12 @@ class StatusHandler : public CallbackInterface_Status {
         case opdata_total_comp_run:
         case erropdata_total_comp_run:
           itoa(value * 100, strtmp, 10);
-          output_P(status, PSTR(TOPIC_TOTAL_COMP_RUN), strtmp);
+          output_P2(status, PSTR(TOPIC_TOTAL_COMP_RUN), strtmp);
           break;
         case opdata_ou_eev1:
         case erropdata_ou_eev1:
           itoa(value, strtmp, 10);
-          output_P(status, PSTR(TOPIC_OU_EEV1), strtmp);
+          output_P2(status, PSTR(TOPIC_OU_EEV1), strtmp);
           break;
       }
     }

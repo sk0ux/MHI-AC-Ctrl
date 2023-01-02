@@ -77,6 +77,7 @@ void publish_cmd_ok();                                        // last MQTT cmd w
 void publish_cmd_unknown();                                   // last MQTT cmd was unknown
 void publish_cmd_invalidparameter();                          // a paramter of the last MQTT was wrong
 void output_P(ACStatus status, PGM_P topic, PGM_P payload);   // publish via MQTT
+void output_P2(ACStatus status, PGM_P topic, PGM_P payload);   // publish via MQTT
 
 void setupOTA();                                              // initialize and start OTA
 void setup_ds18x20();                                         // setup the temperature measurement

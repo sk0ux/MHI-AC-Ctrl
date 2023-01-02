@@ -142,16 +142,16 @@ int MQTTreconnect() {
       Serial.println(F(" MQTT connected"));
       Serial.printf("MQTTclient.connected=%i\n", MQTTclient.connected());
       reconnect_trials=0;
-    //   output_P((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
-    //   output_P((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
+    //   output_P2((ACStatus)type_status, PSTR(TOPIC_CONNECTED), PSTR(PAYLOAD_CONNECTED_TRUE));
+    //   output_P2((ACStatus)type_status, PSTR(TOPIC_VERSION), PSTR(VERSION));
       itoa(WiFi.RSSI(), strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_RSSI), strtmp);
+      output_P2((ACStatus)type_status, PSTR(TOPIC_RSSI), strtmp);
       itoa(WIFI_lost, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_LOST), strtmp);
+      output_P2((ACStatus)type_status, PSTR(TOPIC_WIFI_LOST), strtmp);
       itoa(MQTT_lost, strtmp, 10);
-      output_P((ACStatus)type_status, PSTR(TOPIC_MQTT_LOST), strtmp);
+      output_P2((ACStatus)type_status, PSTR(TOPIC_MQTT_LOST), strtmp);
       WiFi.BSSIDstr().toCharArray(strtmp, 20);
-      output_P((ACStatus)type_status, PSTR(TOPIC_WIFI_BSSID), strtmp);
+      output_P2((ACStatus)type_status, PSTR(TOPIC_WIFI_BSSID), strtmp);
 
 #ifdef TARGET_ESP8266
     // for testing publish list of access points with the expected SSID
@@ -172,11 +172,11 @@ int MQTTreconnect() {
 #endif
 
      itoa(rising_edge_cnt.SCK, strtmp, 10);
-     output_P((ACStatus)type_status, PSTR(TOPIC_FSCK), strtmp);
+     output_P2((ACStatus)type_status, PSTR(TOPIC_FSCK), strtmp);
     itoa(rising_edge_cnt.MOSI, strtmp, 10);
-     output_P((ACStatus)type_status, PSTR(TOPIC_FMOSI), strtmp);
+     output_P2((ACStatus)type_status, PSTR(TOPIC_FMOSI), strtmp);
     itoa(rising_edge_cnt.MISO, strtmp, 10);
-     output_P((ACStatus)type_status, PSTR(TOPIC_FMISO), strtmp);
+     output_P2((ACStatus)type_status, PSTR(TOPIC_FMISO), strtmp);
 
      MQTTclient.subscribe(MQTT_SET_PREFIX "#");
 
@@ -197,13 +197,13 @@ int MQTTreconnect() {
 }
 
 void publish_cmd_ok() {
-  output_P((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_OK));
+  output_P2((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_OK));
 }
 void publish_cmd_unknown() {
-  output_P((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_UNKNOWN));
+  output_P2((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_UNKNOWN));
 }
 void publish_cmd_invalidparameter() {
-  output_P((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_INVALID_PARAMETER));
+  output_P2((ACStatus)type_status, PSTR(TOPIC_CMD_RECEIVED), PSTR(PAYLOAD_CMD_INVALID_PARAMETER));
 }
 
 void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
@@ -221,6 +221,23 @@ void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   strncat_P(mqtt_topic, topic, mqtt_topic_size - strlen(mqtt_topic));
   //  MQTTclient.publish_P(mqtt_topic, payload, true);
 }
+
+void output_P2(const ACStatus status, PGM_P topic, PGM_P payload) {
+  const int mqtt_topic_size = 100;
+  char mqtt_topic[mqtt_topic_size];
+
+  Serial.printf_P(PSTR("P2 status=%i topic=%s payload=%s\n\r"), status, topic, payload);
+
+  if ((status & 0xc0) == type_status)
+    strncpy_P(mqtt_topic, PSTR(MQTT_PREFIX), mqtt_topic_size);
+  else if ((status & 0xc0) == type_opdata)
+    strncpy_P(mqtt_topic, PSTR(MQTT_OP_PREFIX), mqtt_topic_size);
+  else if ((status & 0xc0) == type_erropdata)
+    strncpy_P(mqtt_topic, PSTR(MQTT_ERR_OP_PREFIX), mqtt_topic_size);
+  strncat_P(mqtt_topic, topic, mqtt_topic_size - strlen(mqtt_topic));
+  MQTTclient.publish_P(mqtt_topic, payload, true);
+}
+
 
 #if TEMP_MEASURE_PERIOD > 0
 OneWire oneWire(ONE_WIRE_BUS);       // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
@@ -240,7 +257,7 @@ byte getDs18x20Temperature(int temp_hysterese) {
       char strtmp[10];
       dtostrf(sensors.rawToCelsius(tempR), 0, 2, strtmp);
       //Serial.printf_P(PSTR("new DS18x20 temperature=%s°C\n"), strtmp);
-      output_P((ACStatus)type_status, PSTR(TOPIC_TDS1820), strtmp);
+      output_P2((ACStatus)type_status, PSTR(TOPIC_TDS1820), strtmp);
     }
     DS1820Millis = millis();
     sensors.requestTemperatures();
