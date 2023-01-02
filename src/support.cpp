@@ -112,7 +112,7 @@ void setupWiFi(int& WiFiStatus) {
   }
   else {
     if(WiFi.status() == WL_CONNECTED){
-      Serial.printf_P(PSTR(" connected to %s, IP address: %s (%ddBm)\n"), WIFI_SSID, WiFi.localIP().toString().c_str(), WiFi.RSSI());
+      Serial.printf_P(PSTR(" connected to %s, IP address: %s (%ddBm)\n\r"), WIFI_SSID, WiFi.localIP().toString().c_str(), WiFi.RSSI());
       WiFiStatus = WIFI_CONNECT_OK;
       Serial.println("WIFI_CONNECT_OK");
     }
@@ -210,7 +210,7 @@ void output_P(const ACStatus status, PGM_P topic, PGM_P payload) {
   const int mqtt_topic_size = 100;
   char mqtt_topic[mqtt_topic_size];
 
-  Serial.printf_P(PSTR("status=%i topic=%s payload=%s\n"), status, topic, payload);
+  Serial.printf_P(PSTR("status=%i topic=%s payload=%s\n\r"), status, topic, payload);
 
   if ((status & 0xc0) == type_status)
     strncpy_P(mqtt_topic, PSTR(MQTT_PREFIX), mqtt_topic_size);
@@ -262,7 +262,7 @@ void printAddress(DeviceAddress deviceAddress) {
 
 void setup_ds18x20() {
   sensors.begin();
-  Serial.printf_P(PSTR("Found %i DS18xxx family devices.\n"), sensors.getDS18Count());
+  Serial.printf_P(PSTR("Found %i DS18xxx family devices.\n\r"), sensors.getDS18Count());
   if (!sensors.getAddress(insideThermometer, 0))
     Serial.println(F("Unable to find address for Device 0"));
   else
@@ -291,10 +291,10 @@ void setupOTA() {
     Serial.println(F("\nEnd"));
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf_P(PSTR("Progress: %u%%\n"), (progress / (total / 100)));
+    Serial.printf_P(PSTR("Progress: %u%%\n\r"), (progress / (total / 100)));
   });
   ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf_P(PSTR("Error[%u]: %i\n"), error);
+    Serial.printf_P(PSTR("Error[%u]: %i\n\r"), error);
     if (error == OTA_AUTH_ERROR)
       Serial.println(F("Auth Failed"));
     else if (error == OTA_BEGIN_ERROR)

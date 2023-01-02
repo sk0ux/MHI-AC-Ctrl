@@ -13,7 +13,7 @@ bool troom_was_set_by_MQTT = false;
 
 void MQTT_subscribe_callback(const char* topic, byte* payload, unsigned int length) {
   payload[length] = 0;  // we need a string
-  Serial.printf_P(PSTR("MQTT_subscribe_callback, topic=%s payload=%s payload_length=%i\n"), topic, (char*)payload, length);
+  Serial.printf_P(PSTR("MQTT_subscribe_callback, topic=%s payload=%s payload_length=%i\n\r"), topic, (char*)payload, length);
 #ifndef POWERON_WHEN_CHANGING_MODE
   if (strcmp_P(topic, PSTR(MQTT_SET_PREFIX TOPIC_POWER)) == 0) {
     if (strcmp_P((char*)payload, PSTR(PAYLOAD_POWER_ON)) == 0) {
@@ -371,7 +371,7 @@ void setup() {
   delay(100);
   Serial.println();
   Serial.println(F("Starting MHI-AC-Ctrl v" VERSION));
-  Serial.printf_P(PSTR("CPU frequency[Hz]=%lu\n"), F_CPU);
+  Serial.printf_P(PSTR("CPU frequency[Hz]=%lu\n\r"), F_CPU);
 #ifdef TARGET_ESP8266
   Serial.printf("ESP.getCoreVersion()=%s\n", ESP.getCoreVersion().c_str());
   Serial.printf("ESP.getSdkVersion()=%s\n", ESP.getSdkVersion());
@@ -446,7 +446,7 @@ void loop() {
     static int status;
     if (ret < 0 && !status) {
       status = 1;
-      Serial.printf_P(PSTR("mhi_ac_ctrl_core.loop error: %i\n"), ret);
+      Serial.printf_P(PSTR("mhi_ac_ctrl_core.loop error: %i\n\r"), ret);
     }
     if (ret == 0)
       status = 0;
