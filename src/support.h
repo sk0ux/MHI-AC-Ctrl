@@ -16,7 +16,11 @@
                                                     
 #define WiFI_SEARCH_FOR_STRONGER_AP_INTERVALL 12    // WiFi network re-scan interval in minutes with alternate to +5dB stronger signal if detected
 
-#define MQTT_SERVER "192.168.87.15"               // broker name or IP address of the broker
+//#define MQTT_SERVER "192.168.2.112"               // broker name or IP address of the broker
+#define MQTT_SERVER "192.168.196.249"
+// LISTEN: mosquitto_sub -h 192.168.196.249 -t "#" -v
+// Set temperature mosquitto_pub -h 192.168.196.249 -t MHI-AC-Ctrl2/set/Tsetpoint -m "20" 
+
 //#define MQTT_SERVER "10.1.2.170"               // broker name or IP address of the broker
 #define MQTT_PORT 1883                              // port number used by the broker
 #define MQTT_USER ""                                // if authentication is not used, leave it empty
